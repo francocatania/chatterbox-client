@@ -1,23 +1,22 @@
 $(document).ready(function() {
   app.init();
-  // $("#sendForm").on( "click", function () {
-  //   console.log('I am submitting');
-  // });
 
   $('#sendForm').on('click', function () {
-    debugger;
-    console.log('I am submitting')
+
+  });
+  $('#roomSelect').on('click', function () {
+    // trigger render room messages
+  });
+
 });
-})
 
 var app = {
   server: 'http://parse.sfm8.hackreactor.com/chatterbox/classes/messages',
-  allMessages : [],
+  allMessages: [],
   allRooms: [],
 
   init: function () {
     this.fetch();
-    this.uniqRooms();
   },
   send: function (message) {
     $.ajax({
@@ -38,8 +37,8 @@ var app = {
   fetch: function () {
     $.ajax({
       url: 'http://parse.sfm8.hackreactor.com/chatterbox/classes/messages',
+      data: 'order=-createdAt',
       success: function (messages) {
-        debugger;
         messages.results.forEach(function(msg) {
           app.allMessages.push(msg);
           if (!!msg.roomname) {
@@ -48,30 +47,30 @@ var app = {
 
         });
         app.renderAllMessages();
+        app.renderRoomSelect();
       },
       error: function (data) {
         // See: https://developer.mozilla.org/en-US/docs/Web/API/console.error
         console.error('chatterbox: SHIT, Failed to send message', data);
       }
-    })
+    });
   },
 
   clearMessages: function() {
-    $( "#chats" ).empty();
+    $("#chats").empty();
   },
 
   renderMessage: function (message) {
-    let username = message.username;
-    let text = message.text;
-    let room = message.roomname;
-    $('#chats').append(`<div>${username} says: ${text}</div>`)
+    let username = escape(message.username);
+    let text = escape(message.text);
+    let room = escape(message.roomname);
+    $('#chats').append(`<div>${username} says: ${text}</div>`);
   },
 
   renderAllMessages: function() {
-    debugger;
     app.allMessages.forEach(function(eachMsg) {
       app.renderMessage(eachMsg);
-    })
+    });
   },
 
   getAllRooms: function() {
@@ -81,14 +80,22 @@ var app = {
   // <option value="volvo">Volvo</option>
 
   uniqRooms: function () {
-    _.uniq(allRooms);
+    app.allRooms = _.uniq(app.allRooms);
+  },
+
+  renderRoomSelect: function () {
+    debugger;
+    app.uniqRooms()
+    app.allRooms.forEach(function (roomNum) {
+      $('.rooms').append(`<option value="${roomNum}">${roomNum}</option>`)
+    })
   }
 };
 
 class Message {
   constructor (username, text, roomname) {
-    this.username = username
-    this.text = text
-    this.roomname = roomname
+    this.username = username;
+    this.text = text;
+    this.roomname = roomname;
   }
 }
