@@ -14,7 +14,6 @@ $(document).ready(function() {
     app.currentRoom = document.getElementById('currentRoom').value;
     app.fetch();
   });
-
 });
 
 var app = {
@@ -22,6 +21,7 @@ var app = {
   allMessages: [],
   allRooms: [],
   currentRoom: 'All',
+  fredPics: ['img/Fred.png', 'img/Fred 2.png'],
 
   init: function () {
     this.fetch();
@@ -62,7 +62,6 @@ var app = {
           if (!!msg.roomname) {
             app.allRooms.push(msg.roomname);
           }
-
         });
         app.organizeAllRooms(app.currentRoom);
         app.renderRoomSelect();
@@ -91,11 +90,24 @@ var app = {
   },
 
   renderMessage: function (message) {
-    let username = escape(message.username);
-    let text = escape(message.text);
-    let room = escape(message.roomname);
-    let createdAt = message.createdAt;
-    $('#chats').append(`<div class="message">${room}: <div>${username} says:<br><br>${text}</div><br><br>${createdAt}</div>`);
+    let fred = app.fredPics[Math.random() > .5 ? 1: 0];
+    let username = escape(message.username).replace(/%20/g, " ");
+    let text = escape(message.text).replace(/%20/g, " ");
+    let room = escape(message.roomname).replace(/%20/g, " ");
+    let createdAt = escape(message.createdAt).replace(/%20/g, " ");
+    let $chatTemplate = `
+<div class="w3-card-4 tweet" style="width:100%">
+                   <img src="${fred}" class="w3-left w3-circle w3-margin-right" id="userPicture" style="width:60px">
+                   <div class="card">
+                     <div class="card-block">
+                     <h4 class="card-title">${username}</h4>
+                     <h6 class="card-subtitle mb-2 text-muted">${room}</h6>
+                     <p class="card-text">${text}</p>
+                   </div>
+                 </div>
+               </div>
+                       `;
+    $('#chats').append($chatTemplate);
   },
 
   renderAllMessages: function() {
@@ -110,7 +122,7 @@ var app = {
 
   renderRoomSelect: function () {
     app.allRooms.forEach(function (roomNum) {
-      $('.rooms').append(`<option value="${roomNum}">${roomNum}</option>`);
+      $('.rooms').append(`<option value="${roomNum}">${escape(roomNum).replace(/%20/g, " ")}</option>`);
     });
   }
 };
@@ -122,3 +134,11 @@ class Message {
     this.roomname = roomname;
   }
 }
+
+// <div class="chatWindow">
+//   <img src="img/Fred.png" alt="" class="chatImg">
+//   <div class="chatBox">
+//     <div class="chatHeader"><span class="chatUser">${username}</span><span class="chatRoom">${room}</span></div>
+//     <div class="chatText">${text}</div>
+//   </div>
+// </div>

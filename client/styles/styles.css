@@ -1,12 +1,12 @@
 body {
-    background: #eee;
+    background: #4286f4;
     text-align: center;
     padding: 0 25px;
     font-family: arial, sans-serif;
 }
 
 #main, #chats {
-    width: 500px;
+    width: 900px;
     margin: auto;
     text-align: left;
     background: white;
@@ -94,4 +94,47 @@ form input[type=text] {
     border-color: black;
     margin: 2px;
 }
+
+#headerTitle {
+    font-family: 'Shadows Into Light Two', cursive;
+    font-size: 30px;
+    color: white;
+}
+
+.tweet {
+    margin: 0px 15px 15px 15px;
+    padding: 15px
+}
+
+.userTweet {
+    margin: 0px 15px 15px 15px;
+    padding: 15px
+}
+
+#imageAndText {
+    padding: 16px;
+}
+
+#userPicture {
+
+
+}
+
+#loadMoreButton {
+    margin-left: 60px;
+}
+
+.card-text {
+    margin-top: 20px;
+}
+
+#seeMoreFrom {
+    margin-top: 0px;
+}
+}
+.chatText {
+}
+
+
+
 
